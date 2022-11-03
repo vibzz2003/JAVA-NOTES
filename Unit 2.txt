@@ -1,5 +1,4 @@
-JAVA INHERITENCE - In Java, it is possible to inherit attributes(data members defined in a class) and methods from one class 
-to another, it is called Inheritence in Java and we group this inheritence concept into two categories:
+JAVA INHERITENCE - In Java, it is possible to inherit attributes(data members defined in a class) and methods from one class to another, it is called Inheritence in Java and we group this inheritence concept into two categories:
 
 1) Subclass(Child) - the class that inherits from another class	
 2) Superclass(Parent) - the class being inherited from 
@@ -33,8 +32,7 @@ Output:
 My name is Rohu
 I can eat
 
--> In Java, Inheritance is an IS-A relationship. Means, we use inheritence only if there is an IS-A relationship between 
-two classes. 
+-> In Java, Inheritance is an IS-A relationship. Means, we use inheritence only if there is an IS-A relationship between two classes. 
 
 For Example:
 Car is a Vehicle 
@@ -42,8 +40,7 @@ Orange is a Fruit
 Surgeon is a Doctor
 Dog is an Animal 
 
-METHOD OVERRIDING IN JAVA INHERITENCE- When same method is present in both the superclass and subclass and we change the 
-defination of method in subclass.
+METHOD OVERRIDING IN JAVA INHERITENCE- When same method is present in both the superclass and subclass and we change the defination of method in subclass.
 
 For Example:
 class Animal {
@@ -184,8 +181,7 @@ class Main {
 	}
 }
 
-FINAL KEYWORD - It is a non-access modifier used for classes, attributes, and methods, which makes them non-changeable(imposs-
--ible to inherit or override).
+FINAL KEYWORD - It is a non-access modifier used for classes, attributes, and methods, which makes them non-changeable(impossible to inherit or override).
 
 For Example:
 final class Vehicle {
