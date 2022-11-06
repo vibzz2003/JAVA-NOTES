@@ -299,4 +299,203 @@ Compile Time Error
 Note - Can we declare a constructor final?
 No, because constructor is never inherited.
 
-TYPES OF INHERITENCE - 
+TYPES OF INHERITENCE -  
+
+1) Single Inheritence - When a class inherits another class.
+For Example - Here Dog class inherits the Animal class, so there is single inheritence.
+
+class Animal {
+	void eat(){
+		System.out.println("I eat flesh");
+	}
+class Lion extends Animals {
+	void roar() {
+		System.out.println("Roar...");
+	}
+class Main {
+	public static void main(String args[]){
+	Lion lion = new Lion();
+	lion.roar();
+	lion.eat();
+	}
+}
+
+2) Multilevel Inheritence - When there is a chain of inheritence. 
+For Example - BabyDog inherits Dog which then inherits Animal 
+class Animal {
+	void eat(){
+		System.out.println("I eat flesh");
+	}
+class Dog extends Animals {
+	void bark() {
+		System.out.println("Bark...");
+	}
+class BabyDog extends Dog {
+	void weep() {
+		System.out.println("Weeping...");
+	}
+class Main {
+	public static void main(String args[]){
+	BabyDog tommy = new BabyDog();
+	tommy.bark();
+	tommy.weep();
+	tommy.eat();
+	}
+	
+3) Heirarchial Inheritence - When two or more classes inherits a single class.
+For Example - Son and Father class inherits Grandfather class
+class Grandfather {
+	void slowEat() {
+		System.out.println("Slow Eating...");
+	}
+class Father extends Grandfather {
+	void yoga() {
+		System.out.println("Daily Yoga...");
+	}
+class Son extends Father {
+	void sleepEarly() {
+		System.out.println("Sleep at 9...");
+	}
+}
+class Main {
+	public static void main(String args[]){
+	Son adit = new Son();
+	adit.slowEat();
+	adit.yoga();
+	adit.sleepEarly();
+	}
+}
+
+4) Multiple Inheritence - One class can have more than one superclass and inherit all the features from all the parent classes. Java does not support multiple inheritence with classes. We can achieve multiple inheritence only through interfaces.
+For Example:
+interface One {
+	public void print_geek();
+}
+interface Two {
+	public void print_for();
+}
+interface Three extends one,two {
+	public void print_geek();
+}
+class child implements Three {
+	public void print_geek() {
+		System.out.println("Geeks");
+	}
+	
+	public void print_for() {
+		System.out.println("for");
+	}
+}
+public class Main {
+	public static void main(String args[]) {
+		child c = new child();
+		c.print_geek();
+		c.print_for();
+		c.print_geek();
+	}
+}
+
+5) Hybrid Inheritence - It is a mixture of two or more types of inheritence.
+                               
+							   A
+							   ^
+							  B C
+							   :
+							   D
+Here B and C extends A class and D extends B and C class. Since multiple inheritence is involved in it, therefore java does not support it. It is also known as Diamond 
+Problem. In interface we can do Hybrid Inheritence, therefore diamond problem is solved.
+
+ABSTRACTION IN JAVA - It is the process of hiding the implementation details and showing only functionality to the user.Abstraction lets you focus on what the object does instead of how it does.
+There are two ways to acheive Abstraction:
+1) Abstract Classes(0-100%)
+2) Interface(100%)
+
+ABSTRACT CLASSES -
+
+1) 	A class which is declared with the "abstract" keyword is known as abstract class in Java.
+2)	It can have abstract and non-abstract methods.
+3)	It cannot be instantiated. Means we cannot create object of abstract class.
+4)	It can have constructors and static methods also.
+5)	It can have final methods which will force the subclasss not to change the body of the method.
+For Example -
+abstract class Bike {
+	abstract void run();
+}
+class Honda extends Bike {
+	void run(){
+		System.out.println("Running Safely...");
+	}
+	public static void main(String args[]) {
+		Bike suzuki = new Honda();
+		suzuki.run();
+	}
+}
+
+Example of Abstract class having constructor and non-abstract method -
+abstract class Bike {
+	Bike() {
+		System.out.println("Bike is created");
+	}
+	abstract void run();
+	void changeGear() {
+		System.out.println("Gear Changed");
+	}
+}
+
+class Honda extends Bike {
+	void run() {
+		System.out.println("Running Safely");
+	}
+}
+
+class Main {
+	public static void main(String args[]) {
+		Bike obj = new Honda();
+		obj.run();
+		obj.changeGear();
+	}
+}
+
+Note: If there is an Abstract method in a class, then that class must be abstract.
+Note: If you are extending an abstract class that has an abstract method, you must either provide the implementation of the method or make this class abstract.
+
+For Example-
+interface If1 {
+	void a();
+	void b();
+	void c();
+	void d();
+}
+abtract class Z  implements If1 {
+	public void c() {
+		System.out.println("c"):
+	}
+}
+class M extends Z {
+	public void	a() {
+		System.out.println("a"):
+	}
+	public void b() {
+		System.out.println("b"):
+	}
+	public void d() {
+		System.out.println("d"):
+	}
+}
+class Main{
+	public static void main(String args[]){
+		If1	obj	= new M();
+		M.a();
+		M.b();
+		M.c();
+		M.d();
+	}
+}
+		
+INTERFACES IN JAVA - It is the	blueprint of a class. It contains abstract methods, constants, static methods, default methods,private methods. Method bodies exists only for default methods and static methods. It is used to achive abstraction and multiple inheritence in java.
+
+Java Interface also represent the IS-A relationship.
+
+It cannot be instantiated.
+
+Interface fields are public and static and final by default and the methods are public and abstract.
