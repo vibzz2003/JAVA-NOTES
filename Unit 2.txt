@@ -1,0 +1,503 @@
+JAVA INHERITENCE - In Java, it is possible to inherit attributes(data members defined in a class) and methods from one class to another, it is called Inheritence in Java and we group this inheritence concept into two categories:
+
+1) Subclass(Child) - the class that inherits from another class	
+2) Superclass(Parent) - the class being inherited from 
+
+To inherit from a class, we use "extends" keyword.
+
+For Example: 
+class Animal {
+	String name;
+	public void eat() {
+		System.out.println("I can eat");
+	}
+}
+
+class Dog extends Animal {
+	public void display() {
+		System.out.println("My name is ": name);
+	}
+}
+
+class Main {
+	public static void main(String args[]) {
+		Dog labrador = new Dog();
+		labrador.name = "Rohu";
+		labrador.display();
+		labrador.eat();
+	}
+}
+
+Output:
+My name is Rohu
+I can eat
+
+-> In Java, Inheritance is an IS-A relationship. Means, we use inheritence only if there is an IS-A relationship between two classes. 
+
+For Example:
+Car is a Vehicle 
+Orange is a Fruit
+Surgeon is a Doctor
+Dog is an Animal 
+
+METHOD OVERRIDING IN JAVA INHERITENCE- When same method is present in both the superclass and subclass and we change the defination of method in subclass.
+
+For Example:
+class Animal {
+	public void eat(){
+		System.out.println("I can eat");
+	}
+}
+class Dog extends Animal {
+	public void eat() {
+		System.out.println("I eat dog food");
+	}
+	
+	public void bark() {
+		System.out.println("I can bark");
+	}
+}
+
+class Main {
+	public static void main(String args[]){
+		Dog labrador = new Dog();
+		
+		labrador.eat();
+		labrador.bark();
+	}
+}
+
+Why use Inheritence?
+i) Code Reusability - The code present in parent class can be directly used by the child class.
+ii) Method Overriding, also known as runtime polymorphism.
+
+SUPER KEYWORD IN INHERITENCE - It is used to refer immediate parent class instance variable, method, constructor.
+
+1) Super keyword used to refer immediate parent class instance variable.
+
+class Animal {
+	String color = "White";
+}
+class Dog extends Animal {
+	String color = "Black";
+	void printColor() {
+		System.out.println(color);
+		System.out.println(super.color);
+	}
+}
+class Main {
+	public static void main(String args[]){
+		Dog labrador = new Dog();
+		labrador.printColor();
+	}
+}
+
+2) Super keyword can be used to invoke parent class method.
+
+class Animal {
+	void eat() {
+		System.out.println("I can eat");
+	}
+}
+class Dog extends Animal {
+	void eat() {
+		System.out.println("Eating...");
+	}
+	void test() {
+		super.eat();
+		eat();
+	}
+}
+class Main {
+	public static void main(String args[]) {
+		Dog labrador = new Dog();
+		labrador.test();
+	}
+}
+
+3) Super keyword can be used to invoke parent class constructor.
+
+class Animal {
+	Animal() {
+		System.out.println(" I can bite.");
+	}
+}
+
+class Dog extends Animal {
+	Dog() {
+		System.out.println(" I am Dog.");
+		super();
+	}
+}
+class Main {
+	public static void main(String args[]) {
+		Dog labrador = new Dog();
+	}
+}
+
+Note - super() is added in each class constructor automatically by compiler if there is no super() or this().
+
+For Example:
+class Animal { 
+	Animal() {
+		System.out.println("I can bite");
+	}
+}
+class Dog extends Animal {
+	Dog() {
+		System.out.println("I am Dog");
+	}
+}
+class Main {
+	public static void main(String args[]) {
+		Dog labrador = new Dog();
+	}
+}
+
+Output:
+I can bite
+I am Dog
+
+PROTECTED MEMBERS IN INHERITENCE - We can access protected attributes and methods from the child class.
+
+For Example:
+child Animal {
+	protected String name;
+	protected void display() {
+		System.out.println("I am an Animal");
+	}
+}
+child Dog extends Animal {
+	public void getInfo() {
+		System.out.println("My name is "+name);
+	}
+}
+class Main {
+	public static void main(String args[]){
+		Dog labrador = new Dog();
+		labrador.name = "Tommy";
+		labrador.getInfo();
+		labrador.display();
+	}
+}
+
+FINAL KEYWORD - It is a non-access modifier used for classes, attributes, and methods, which makes them non-changeable(impossible to inherit or override).
+
+For Example:
+final class Vehicle {
+	...
+}
+class Car extends Vehicle {
+	...
+}
+
+Output:
+Error
+
+1) Final Variable - If you make any variable final, you cannot change its value(it will be a constant).
+For Example:
+class Bike {
+	final int speedLimit = 90;
+	void run() {
+		speedLimit = 400;
+	}
+	public static void main(String args[]){
+		Bike honda = new Bike();
+		honda.run();
+	}
+}
+
+Output:
+Compilation Time Error
+
+2) Final Method - If you make any method final, you cannot override it.
+For Example:
+class Bike {
+	final void run() {
+		System.out.println("Running");
+	}
+}
+class Honda extends Bike {
+	void run() {
+		System.out.println("Running safely with 100kmph");
+	}
+	public static void main(String args[]) {
+		Honda activa = new Honda();
+		activa.run();
+	}
+}
+
+Output:
+Compile Time Error
+
+3) Final Class - If you make any class final, you cannot extend it.
+For Example:
+final class Bike {
+	...
+}
+class Honda extends Bike {
+	void run() {
+		System.out.println("Running safely with 100lmph");
+	}
+	public static void main(String args[]){
+		Honda activa = new Honda();
+		activa.run();
+	}
+}
+
+Output:
+Compile Time Error
+
+Note - Final method can be inherited but cannot be overridden.
+
+class Bike{  
+  final void run() {
+	System.out.println("running...");
+  }  
+}  
+class Honda extends Bike{  
+   public static void main(String args[]){  
+	Honda activa = new Honda();
+	activa.run();  
+   }  
+}
+
+Note - Blank or Uninitialized Final Variable,
+We can initialize this final variable inside a constructor only.
+
+class Bike {
+	final int speedlimit;  //blank or uninitialized final variable
+	
+	Bike() {
+		speedlimit = 100;
+		System.out.println(speedlimit);
+	}
+	public static void main(String args[]) {
+		Bike suzuki = new Bike();
+	}
+}
+
+Output:
+100
+
+Note - Final Parameter - If you declare any parameter as final, you cannot change its value.
+
+class Bike {
+	int cube(final int n) {
+		n = n+2;    //cannot be changed
+		n*n*n; 
+	}
+	public static void main(String args[]) {
+		Bike honda = new Bike();
+		honda.cube(5);
+	}
+}
+
+Output:
+Compile Time Error
+
+Note - Can we declare a constructor final?
+No, because constructor is never inherited.
+
+TYPES OF INHERITENCE -  
+
+1) Single Inheritence - When a class inherits another class.
+For Example - Here Dog class inherits the Animal class, so there is single inheritence.
+
+class Animal {
+	void eat(){
+		System.out.println("I eat flesh");
+	}
+class Lion extends Animals {
+	void roar() {
+		System.out.println("Roar...");
+	}
+class Main {
+	public static void main(String args[]){
+	Lion lion = new Lion();
+	lion.roar();
+	lion.eat();
+	}
+}
+
+2) Multilevel Inheritence - When there is a chain of inheritence. 
+For Example - BabyDog inherits Dog which then inherits Animal 
+class Animal {
+	void eat(){
+		System.out.println("I eat flesh");
+	}
+class Dog extends Animals {
+	void bark() {
+		System.out.println("Bark...");
+	}
+class BabyDog extends Dog {
+	void weep() {
+		System.out.println("Weeping...");
+	}
+class Main {
+	public static void main(String args[]){
+	BabyDog tommy = new BabyDog();
+	tommy.bark();
+	tommy.weep();
+	tommy.eat();
+	}
+	
+3) Heirarchial Inheritence - When two or more classes inherits a single class.
+For Example - Son and Father class inherits Grandfather class
+class Grandfather {
+	void slowEat() {
+		System.out.println("Slow Eating...");
+	}
+class Father extends Grandfather {
+	void yoga() {
+		System.out.println("Daily Yoga...");
+	}
+class Son extends Father {
+	void sleepEarly() {
+		System.out.println("Sleep at 9...");
+	}
+}
+class Main {
+	public static void main(String args[]){
+	Son adit = new Son();
+	adit.slowEat();
+	adit.yoga();
+	adit.sleepEarly();
+	}
+}
+
+4) Multiple Inheritence - One class can have more than one superclass and inherit all the features from all the parent classes. Java does not support multiple inheritence with classes. We can achieve multiple inheritence only through interfaces.
+For Example:
+interface One {
+	public void print_geek();
+}
+interface Two {
+	public void print_for();
+}
+interface Three extends one,two {
+	public void print_geek();
+}
+class child implements Three {
+	public void print_geek() {
+		System.out.println("Geeks");
+	}
+	
+	public void print_for() {
+		System.out.println("for");
+	}
+}
+public class Main {
+	public static void main(String args[]) {
+		child c = new child();
+		c.print_geek();
+		c.print_for();
+		c.print_geek();
+	}
+}
+
+5) Hybrid Inheritence - It is a mixture of two or more types of inheritence.
+                               
+							   A
+							   ^
+							  B C
+							   :
+							   D
+Here B and C extends A class and D extends B and C class. Since multiple inheritence is involved in it, therefore java does not support it. It is also known as Diamond 
+Problem. In interface we can do Hybrid Inheritence, therefore diamond problem is solved.
+
+ABSTRACTION IN JAVA - It is the process of hiding the implementation details and showing only functionality to the user.Abstraction lets you focus on what the object does instead of how it does.
+There are two ways to acheive Abstraction:
+1) Abstract Classes(0-100%)
+2) Interface(100%)
+
+ABSTRACT CLASSES -
+
+1) 	A class which is declared with the "abstract" keyword is known as abstract class in Java.
+2)	It can have abstract and non-abstract methods.
+3)	It cannot be instantiated. Means we cannot create object of abstract class.
+4)	It can have constructors and static methods also.
+5)	It can have final methods which will force the subclasss not to change the body of the method.
+For Example -
+abstract class Bike {
+	abstract void run();
+}
+class Honda extends Bike {
+	void run(){
+		System.out.println("Running Safely...");
+	}
+	public static void main(String args[]) {
+		Bike suzuki = new Honda();
+		suzuki.run();
+	}
+}
+
+Example of Abstract class having constructor and non-abstract method -
+abstract class Bike {
+	Bike() {
+		System.out.println("Bike is created");
+	}
+	abstract void run();
+	void changeGear() {
+		System.out.println("Gear Changed");
+	}
+}
+
+class Honda extends Bike {
+	void run() {
+		System.out.println("Running Safely");
+	}
+}
+
+class Main {
+	public static void main(String args[]) {
+		Bike obj = new Honda();
+		obj.run();
+		obj.changeGear();
+	}
+}
+
+Note: If there is an Abstract method in a class, then that class must be abstract.
+Note: If you are extending an abstract class that has an abstract method, you must either provide the implementation of the method or make this class abstract.
+
+For Example-
+interface If1 {
+	void a();
+	void b();
+	void c();
+	void d();
+}
+abtract class Z  implements If1 {
+	public void c() {
+		System.out.println("c"):
+	}
+}
+class M extends Z {
+	public void	a() {
+		System.out.println("a"):
+	}
+	public void b() {
+		System.out.println("b"):
+	}
+	public void d() {
+		System.out.println("d"):
+	}
+}
+class Main{
+	public static void main(String args[]){
+		If1	obj	= new M();
+		M.a();
+		M.b();
+		M.c();
+		M.d();
+	}
+}
+		
+INTERFACES IN JAVA - It is the	blueprint of a class. It contains abstract methods, constants, static methods, default methods,private methods. Method bodies exists only for default methods and static methods. It is used to achive abstraction and multiple inheritence in java.
+
+Java Interface also represent the IS-A relationship.
+
+It cannot be instantiated.
+
+Interface fields are public and static and final by default and the methods are public and abstract.
+hello 
+byeee
