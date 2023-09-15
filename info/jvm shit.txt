@@ -1,0 +1,42 @@
+JVM(Java Virtual Machine) acts as a run-time engine to run Java applications. 
+JVM is the one that actually calls the main method present in a java code.
+JVM is a part of JRE(Java Runtime Environment).
+programmer can develop Java code on one system and can expect it to run on any other Java-enabled system without any adjustment. This is all possible because of JVM.
+
+jvm memory : heap
+             stack
+             methods
+             registers
+
+first we create a .java file. the .java file compiles and executes with the same name as the class is having oin the code. this .java file
+is converted to .class file. After loading the “.class” file, JVM creates an object of type Class to represent this file in the heap memory.
+
+
+Method area: In the method area, all class level information like class name, immediate parent class name, methods and variables information etc. are stored, including static variables.
+
+Heap area: Information of all objects is stored in the heap area. There is also one Heap Area per JVM. It is also a shared resource.
+
+Stack area: For every thread, JVM creates one run-time stack which is stored here. Every block of this stack is called activation record/stack frame which stores methods calls.
+
+PC Registers: Store address of current execution instruction of a thread.
+
+Native method stacks: For every thread, a separate native stack is created. It stores native method information. 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Differences between JDK, JRE and JVM :
+
+    Java Development Kit (JDK) is a software development environment used for developing Java applications and applets.
+    It includes the Java Runtime Environment (JRE), an interpreter/loader (Java), a compiler (javac), an archiver (jar), a documentation generator (Javadoc),
+
+
+    Now we need an environment to make a run of our program.
+    Henceforth, JRE stands for “Java Runtime Environment”
+    The Java Runtime Environment provides the minimum requirements for executing a Java application; it consists of the Java Virtual Machine (JVM), core classes, and supporting files. 
+
+
+    jre = jvm + class libraries
+
+    jdk = jre + debuggers + compiler + java docs
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+

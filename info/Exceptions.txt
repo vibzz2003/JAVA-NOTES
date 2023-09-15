@@ -1,0 +1,48 @@
+//custom exception:
+
+class NotEligibleException extends Exception{
+    NotEligibleException(String str){
+        super(str);
+    }
+}
+
+class TestException1{
+    void int validate(int n) throws NotEligibleException{
+        if(n<18){
+            throw new NotEligibleException("not eligible to vote");
+        }
+        else{
+            System.out.println("welcome to vote");
+        }
+    }
+}
+
+class Main{
+    public static void main(String args[]){
+        try{
+            validate(13);
+        }
+        catch(NotEligibleException e){
+            System.out.println(e);
+        }
+    }
+}
+-------------------------------------------------------------------------------------------------------------------------
+
+class MyCustomException extends Exception{
+
+}
+
+public void Main{
+    public static void main(String args){
+        try{
+            throw new MyCustomException();
+        }
+        catch(MyCustomException e){
+            System.out.println(e);
+            System.out.println(e.getMessage());  // null
+        }
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------
+

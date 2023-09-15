@@ -1,0 +1,461 @@
+//Thread
+
+Share memory
+Can run concurrently (vs. parallel ?)
+Appln. can have multiple threads
+Exception in a T does not affect another T
+T-T communication is cheaper
+Can have priority for scheduling (1-10) - P(New T) = P(parent T)
+Executed until (1) call to exit method, (2) Non-daemon T have died
+User & Daemon T (Can be converted) - New T is daemon if parent T is daemon
+
+User vs. Daemon T
+(1) Priority: High - Low
+(2) Role: Specific/Critical/Complex task - Support task
+(3) Execution: Foreground - Background
+(4) JVM: Waits until finish (finish by app. or self) - Force terminate if all UT finish
+(5) Creation: Appln - JVM (e.g. GC)
+
+------------------------------------------------------------------------------------------------------------------------
+
+//Thread Life-cycle
+
+New - Created
+Active - Has substates Runnable & Running wrt CPU alloc.
+Blocked / Waiting - sleep(ms), join(ms), wait(ms), parkUntil(ms), parkNannos(ns)
+Timed Waiting - to avoid starvation
+Terminated - end of run()
+
+Note: Constants in java.lang.Thread.State class which can be fetched using getState()
+(1) NEW, RUNNABLE, BLOCKED, WAITING, TIMED_WAITING, TERMINATED
+
+-------------------------------------------------------------------------------------------------------------------------
+
+//Thread Creation
+
+(1) Subclass of Thread class & override run()
+	Note: Thread extends Object implements Runnable
+	Have Direct control on T creation & mgmt.: 
+(2) Implement Runnable IF
+	Abstract T mgmt. from rest of application & pass application's tasks to an executor
+
+------------------------------------------------------------------------------------------------------------------------
+
+1)
+class object extends Thread{
+    public void run(){
+        System.out.println("this is a thread extended class");
+    }
+}
+class Main{
+    public static void main(String args[]){
+        Object t1 = new Object();
+        Object.start();
+    }
+}
+
+------------------------------------------------------------------------------------------------------------------------
+2)
+class object implements Runnable{
+    public void run(){
+        System.out.println("this is implemented runnable class");
+    }
+}
+class Main{
+    public static void main(String args[]){
+        Runnable/object t1 = new object();
+        Thread t = new Thread(t1); 
+        Thread t1 = new Thread(t1,"thread");
+
+        t.start();
+        t1.start();
+    }
+}
+
+-------------------------------------------------------------------------------------------------------------------------
+
+//(4) Use of Thread() constructor
+//(5) Use of Thread(String) constructor
+
+
+public class Demo{
+    public static void main(String args[]){
+        Thread t1 = new Thread();
+        Thread t2 = new Thread("THREAD 2");
+        t1.start();
+        t2.start();
+        System.out.println(t1.getName());
+        System.out.println(t2.getName());
+    }
+} 
+
+------------------------------------------------------------------------------------------------------------------------
+
+class Demo extends Thread{
+    public void run(){
+        for(int i=0;i<n;i++){
+            try{
+                Thread.currentThread.sleep(300);
+            }
+            catch(Exception e){
+                System.out.println(e);
+            }
+            System.out.println(i+1 + "current thread running:" + Thread.currentThread.getName());
+        }
+    }
+}
+public class Main{
+    public static void main(String args[]){
+        Demo obj1 = new Demo();
+        Demo obj2 = new Demo();
+        System.out.println(Thread.currentThread().getName());
+        obj1.start();
+        obj2.start();
+        try{
+            obj1.join();     //tells main to wait/block
+        }
+        catch(InterruptedException e){
+            System.out.println("main continues");
+        }
+
+        obj.start();
+        System.out.println("main continues");
+        System.out.println("main ends");
+    }
+}
+
+-------------------------------------------------------------------------------------------------------------------------
+
+Invoke run() directly? 
+
+=> run() goes onto the current call stack rather than at the beginning of a new call stack
+=> invoking object is considered as normal object & not thread object
+
+context switching is not done while invoking run function directly
+
+-------------------------------------------------------------------------------------------------------------------------
+
+class Demo extends Thread{
+    public void run(){
+        if(Thread.currentThread().isDaemon()){
+            System.out.println("the thread is daemon" + Thread.currentThread().getName());
+        }
+        else{
+            System.out.println("the thread is user thread" + Thread.currentThread.getName());
+        }
+    }
+}
+public class Main{
+    public static void main(String args[]){
+        Demo obj1 = new Demo();
+        Demo obj2 = new Demo();
+
+        System.out.println(obj1.isDaemon());
+        System.out.println(obj1.getId());
+        System.out.println(Thread.currentThread().getName());
+
+        obj1.setDaemon(true);
+        System.out.println(obj1.isDaemon());
+
+        obj1.start();
+        obj2.start();
+        obj2.isDaemon(true);
+
+        //NORM_PRIORITY (5), MIN_PRIORITY (1), MAX_PRIORITY (10)
+        System.out.println(Thread.currentThread().getPriority());
+        Thread.currentThread().setPriority(6);
+
+        obj1.setPriority(6);
+        System.out.pritnln(obj1.getPriorty());
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------------------
+
+class Demo implements Runnable{
+    public void run(){
+        System.out.println("Thread 0 - is running");
+        try{
+            for(int i=0; i<6; i++){
+                Thread.sleep(3000);
+                System.out.println("The current thread" + i);
+            }
+        }
+        catch(Exception e){
+            System.out.println("the current thread is not completed");
+        }
+    }
+}
+
+class Main {
+    public static void main(String args[]) throws InterruptedException{
+       Demo/ Runnable obj = new Demo();
+       Thread t = new Thread(obj);
+       long startTime = System.currentTimeMillis();
+
+       long patience = 7000;
+       while(t.isAlive()){
+            t.join(3000);
+            System.out.println("main thread is waiting ");
+       }
+
+       currentTime = System.currentTimeMillis();
+       waitTime = crrentTime - startTime;
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------------------
+
+public class Demo{
+    public static void main(String args[]){
+        Thread t1 = new Thread(){
+        public void run(){
+            System.out.println("hello");
+        }
+      };
+      t1.start();
+    }
+}
+---------------------------------------------------------------------------------------------------------------------------
+
+//Multiple tasks to multiple threads
+
+(1) Same run() - assign tasks wrt T name
+(2) Have separate run() with different classes extending/implementing Thread/Runnable
+(3) Have separate run() with Anonymous classes extending/implementing Thread/Runnable
+
+----------------------------------------------------------------------------------------------------------------------------
+Thread exception : 
+
+IllegalArgumentException - E.g. setPriority(<1 and >10), sleep(-ve)
+InterruptedException - E.g. sleep(ms), join(ms), wait()
+IllegalThreadStateException - E.g. setDaemon(), Starting Thread twice
+
+//ThreadGroup vs. Thread: TG has "uncaughtException() method". 
+=> When a T within a thread group exits because it threw an uncaught exception, the ThreadGroup.uncaughtException() method is called
+=> Gives you an opportunity to shut down the system, write a message to a log file, or restart a failed service.
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+//Thread Synchronization
+
+Threads communicate by sharing access to fields & Objects also ref. fields
+
+//Possible Errors: 
+(1) Thread Interference
+(2) Memory consistency errors
+
+//Solution: T. Synchronization
+
+------------------------------------------------------------------------------------------------------------------------------
+
+class Demo{
+    void modify(){
+        int x = 5;
+        void increment(){
+            x++;
+        }
+        void decrement(){
+            x--;
+        }
+        int value(){
+            return x;
+        }
+    }
+}
+
+If an object of class "Modify" is referenced by multiple threads, Interference between threads may result in undesired outputs.
+Interference occurs when operation of 2Ts (act on same data) are interleaved & results are undesired/unpredictable
+
+//Actions that create "happens-before relationships"
+(1) Thread.start( ) - Effects of code that led to creation of new thread are visible to new thread
+(2) Thread.join( )  - Effects of code in the thread are visible to thread that performed join
+(3) Synchronization
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+//Synchronization
+
+(1) Mutual Exclusive (while data sharing)
+	(a) Synchronized methods
+	(b) Synchronized statements/blocks
+	(c) Static Synchronization
+(2) Cooperation (or) Inter-Thread Communication
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+class Demo{
+    int x = 5;
+    Synchronized void increment(){
+        x++;
+        try{
+            x.Thread.sleep(400);
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+    }
+    Synchronized void decrement(){
+        x--;
+        try{
+            x.Thread.sleep(300);
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+    }
+    Synchronized int value(){
+        return x;
+    }
+    
+}
+
+-------------------------------------------------------------------------------------------------------------------------------
+//Significance
+(1) Impossible for 2 invocations of synchronized methods on same object to interleave. 
+	i.e. When T1 is executing a synchronized method for an object, T2 that invokes synchronized methods for the same object gets blocked (suspended) until T1 is done with the object.
+(2) Synchronized method exits -> auto establishes happens-before relationship with any subsequent invocation of a synchronized method for the same object
+	Guarantees that changes to state of object are visible to all threads
+
+//Reason
+Synchronization is built on intrinsic lock or monitor lock - Implementation refer "java.util.concurrent.locks"
+
+//Output: 
+When synchronized (x = 5)
+When not synchronized (x = unpredictable)
+
+//Note
+(1) Constructors cannot be synchronized.
+(2) 'final' fields cannot be modified after object is constructed. They can be safely read through non-synchronized methods once object is constructed.
+(3) Lock release occurs even if return was caused by an uncaught exception.
+(4) When "static synchronized method" is invoked, T acquires intrinsic lock for Class object associated with class - Access to class's static fields is controlled by lock. (Distinct from the lock for any instance of the class)
+(5) Reentrant synchronization => Allowing a thread to acquire same lock more than once
+(6) After Effects: Contention (E.g. Starvation, Livelock)
+----------------------------------------------------------------------------------------------------------------------------------
+
+class Table{
+    public void number(int a){
+        synchronized(this){
+            for(int i=0;i<5;i++){
+                System.out.println("the name of the current thread is :" + Thread.currentThread().getName());
+                try{
+                    Thread.sleep(400);
+                }
+                catch(Eception e){
+                    System.out.println(e);
+                }
+            }
+        }
+    }
+}
+class Demo extends Thread{
+    Table obj;
+    Demo(Table obj){
+        this.obj = obj;
+    }
+    public void run(){
+        if(Thread.currentThread().getName() =  T1){
+            obj.number(2);
+        }else{
+            obj.number(7);
+        }
+    }
+}
+
+class Main{
+    public static void main(String args[]){
+        Table obj = new Table();
+        Demo thread1 = new Demo(obj);
+        Demo thread2 = new Demo(obj);
+        thread1.setName("t1");
+        thread2.setName("t2");
+        thread1.start();
+        thread2.start();
+    }
+}
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+DEADLOCK:
+
+class Deadlock{
+    public static void main(String args[]){
+
+        Object resource1 = new Object();
+        Object resource2 = new Object();
+
+        Thread t1 = new Thread(){
+            public void run(){
+                synchronized(resource1){
+                    System.out.println("r1 synchronized");
+                    synchronized(resource2){
+                        System.out.println("r2 synchronized");
+                    }
+                }
+            }
+        };
+
+        Thread thread2 = new Thread(){
+            public void run(){
+                synchronized(resource2){
+                    System.out.println("r2 synchronized");
+                    synchronized(resource1){
+                        System.out.println("r1 synchronized");
+                    }
+                }
+            }
+        };
+
+        t1.start();
+        t2.start();
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+synchronisation takes place by two methods :
+
+mutual exclusive:
+ sync methods
+ sync blocks
+ static sync
+
+cooperation 
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+MUTUAL EXCLUSIVE :
+
+
+    Sync methods:
+            class Methods{
+                int x = 5;
+                synchromised void increment(){
+                    x++;
+                    try{
+                        Thread.sleep(10);
+                    }
+                    catch(InterruptedException e);
+                    
+                }
+                synchromised void decrement(){
+                    x--;
+                    try{
+                        Thread.sleep(10);
+                    }
+                    catch(InterruptedException e);
+                }
+            }
+
+            class Demo extends Thread{
+                Method obj;
+                Demo(Method obj){
+                    this.obj = obj;
+                }
+                public void run(){
+                    if(Thread.currentThread.getName() == "t1"){
+                        obj.increment();
+                    }
+                    else{
+                        obj.decrement();
+                    }
+                }
+            }
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

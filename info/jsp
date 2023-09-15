@@ -1,0 +1,169 @@
+1.) jsp scriplet tag:
+    In JSP, java code can be written inside the jsp page using the scriptlet tag
+
+
+    The scripting elements provides the ability to insert java code inside the jsp. There are three types of scripting elements:
+
+scriptlet tag
+expression tag
+declaration tag
+
+A scriptlet tag is used to execute java source code in JSP.
+< %java source code% >
+
+<html>
+<body>
+<% out.print("welcome to jsp"); %>
+</body>
+</html>
+
+<html>
+<body>
+<%
+String name = request.getParameter("username");
+out.print("welcome" + name);
+%>
+</body>
+</html>
+
+2.) JSP expression tag:
+    The code placed within JSP expression tag is written to the output stream of the response.
+    So you need not write out.print() to write data. It is mainly used to print the values of variable or method.
+    <%= statement%>
+
+    <html>
+    <body>
+    <%= "welcome to jsp"%>
+    </body>
+    </html>
+
+    <html>
+    <body>
+    Current Time :<%= java.util.Calender.getInstance().getTime()>
+    </body>
+    </html>
+
+3.) JSP Declaration Tag:
+
+The JSP declaration tag is used to declare fields and methods.
+The code written inside the jsp declaration tag is placed outside the service() method of auto generated servlet.
+So it doesn't get memory at each request.
+
+<%! field or method declaration%>
+
+Jsp Scriptlet Tag	                                                       Jsp Declaration Tag
+The jsp scriptlet tag can only declare               the jsp declaration tag can declare variables as well as methods.
+variables not method.
+
+The declaration of scriptlet tag is placed           The declaration of jsp declaration tag is 
+inside the _jspService() method.	                 placed outside the _jspService() method.
+
+<html>
+<body>
+<%! int data = 50;%>
+<%= "the data is:" + data%>
+</body>
+</html>
+
+
+<html>
+<body>
+<%!
+int cube(int n){
+    return n*n*n;
+}
+%>
+<%= "cube of 3" + cube(3)%>
+</body>
+</html>
+-------------------------------------------------------------------------------------------------------------------------
+The JSP pages follow these phases:
+
+1) Translation of JSP Page
+	JSP page is translated into servlet file. A Java servlet file is generated from a JSP source file.
+	This is the first step of JSP life cycle.	  
+
+2) Compilation of JSP Page
+	The generated java servlet file is compiled into java servlet class.
+	JSP page is compiled by the JSP engine.
+	
+3) Classloading (the classloader loads class file)
+	Servlet class that has been loaded from JSP source is now loaded into the container.
+
+4) Instantiation (Object of the generated Servlet is created).
+	In this step the object i.e. the instance of the class is generated.
+	The container manages one or more instances of this class in the response to requests and other events.
+
+5) Initialization ( the container invokes jspInit() method).
+	_jspinit() method will initiate the servlet instance which was generated from JSP and will be invoked by the container in this phase.
+	Once the instance gets created, init method will be invoked immediately after that
+	It is only called once during a JSP life cycle,
+
+6) Request processing ( the container invokes _jspService() method).
+	_jspservice() method is invoked by the container for all the requests raised by the JSP page during its life cycle.
+	It passes request and response objects.
+	This method cannot be overridden.
+
+7) Destroy ( the container invokes jspDestroy() method).
+	_jspdestroy() method is also invoked by the container.
+	This method is called when container decides it no longer needs the servlet instance to service requests.
+	When the call to destroy method is made then, the servlet is ready for a garbage collection.
+	This is the end of the life cycle.
+	We can override jspdestroy() method when we perform any cleanup such as releasing database connections or closing open files.
+
+-------------------------------------------------------------------------------------------------------------------------
+
+JSP and Servelets:
+
+1) Differentiate between JSP and Servlets.
+
+ans. 
+Servelet                             JSP               
+----------------------------------------------------------------------
+a) It is a java code.                a) It is a HTML based code.
+
+b) Writing code is servelet is       b) Writing code in JSP is easy 
+harder than JSP as it is HTML in     as it is java in HTML.
+java.
+
+c) Servelet plays a controller       c) JSP is the view in the MVC 
+role in the hasMVC approach.         approach for showing output.
+
+d) Servelet is faster than JSP.      d) JSP is slower than Servelet 
+								      because the first step in the
+								       hasJSP lifecycle is the 
+								     translation of JSP to java code
+								     and then compile.
+
+e) Servelet can accept all           e) JSP can only accept HTTP
+protocol requests.		                 requests.								                       
+						 
+f) In Servelet, we can override      f) In JSP, we cannnot override
+the service() method.				 its service() method.
+
+g) By default session management     g) It is enabled automatically.
+is not enabled, user have to enable
+it explicitly.
+
+h) In servlet we have to implement   h) In JSP business logic is 
+everything like business logic and   seperated from presentation
+presentation logic in just one 		logic by using JavaBeansclient-
+servlet file.						side.
+
+i) Modification in servlet is        i) JSP Modification is fast,just  
+time-consuming compiling task        need to click the refresh button.
+because it includes reloading,
+recompiling,JavaBeans and 
+restarting the server.
+
+j) It does not have inbulit          j) In JSP there are inbuilt 
+implicit objects.                       implicit objects
+
+k) There is no method for            k) While running the JS at the 
+running JavaScript on the               client side in JSP, the client 
+client side in Servlet.                 -side validations is used.
+
+l) Packages are to be imported       l) Packages can be imported into 
+on the top of the program.              JSP program(middleclient-side,
+								        top or bottom).
+

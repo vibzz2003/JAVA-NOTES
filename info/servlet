@@ -1,0 +1,518 @@
+1 . significance of deployement descriptor for web application
+
+The deployment descriptor can specify a list of filenames that the server should try when the user accesses a path that represents a WAR subdirectory that is not already explicitly mapped to a servlet. 
+A web application's deployment descriptor maps the http request with the servlets.
+When the web server receives a request for the application, it uses the deployment descriptor to map the URL of the request to the code that ought to handle the request.
+The deployment descriptor should be named as web.xml.
+It resides in the application's WAR file under the WEB-INF/ directory. 
+root element : <web-app>
+binding of a servlet with the <servlet> element - declares the servlet
+by the help of <servlet-mapping> - maps the url of the request
+
+<web-app>
+    <servlet>
+        <servlet-name>HELLO</servlet-name>            //name of the servlet
+        <servlet-class>class name</servlet-class>     //class of the servlet
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>HELLO</servlet-name>            //name of the servlet 
+        <url-pattern> name of the url</url-pattern>   //its url type
+    </servlet-mapping>
+</web-app>
+
+<init-param> - contains name value pair as initialisation parameter in a servlet
+<small-icon> - specifies the location of smalll image used in web application
+<large-icon> - specifies the location of large image used in web application 
+
+-------------------------------------------------------------------------------------------------------------------------
+GenericServlet
+GenericServlet class implements Servlet, ServletConfig and Serializable interfaces. 
+It provides the implementation of all the methods of these interfaces except the service method.
+GenericServlet class can handle any type of request so it is protocol-independent.
+You may create a generic servlet by inheriting the GenericServlet class and providing the implementation of the service method.
+
+-It is defined by javax.servlet package.
+-It is not dependent on any particular protocol.
+-The service method is abstract.
+-It forwards and includes a request and is also possible to redirect a request.
+-GenericServlet doesn’t allow session management with cookies and HTTP sessions.
+-It is an immediate child class of Servlet interface.
+-GenericServlet is a superclass of HttpServlet class.
+
+
+
+HttpServlet
+The HttpServlet class extends the GenericServlet class and implements Serializable interface. 
+It provides http specific methods such as doGet, doPost, doHead, doTrace etc.
+
+-It is defined by javax.servlethttp package.
+-It is a dependent protocol and is only used with HTTP protocol.
+-The service method is non-abstract
+-It forwards and includes a request but it is not possible to redirect the request.
+-HTTPServlet allows session management with cookies and HTTP sessions.
+-It is an immediate child class of GenericServlet class.
+-HttpServlet is a subclass of GenericServlet class.
+-------------------------------------------------------------------------------------------------------------------------
+
+Session Management in Servlets.
+
+Ans. Session simply means a particular time of interval. Session Tracking is a way to maintain state(data) of an user. It is also known as session management in Servlets.
+HTTP protocol is a stateless so we need to mainatain state using session tracing techniques. Each time user requests the server, server trwats it as a new request. So we need to maintain the state of an user to recognize to particular user.
+
+Session Tracking Techniques:
+1) Cookies
+2) Hidden Form Field
+3) URL Rewriting
+4) HttpSession
+
+Cookies:
+A cookies is a small piece of information that is persisted between the multiple client requests.
+persisted - continue to exist
+A cookie has a name, single value, and optinal attributes such as comment, path and domain qualifiers, maximum age , and a version number.
+
+How Cookie works:
+By default, each request is considered as a new request.In cookies technique, we add cookies with response from the server.So cookie is stored in the cache of the browser. After that if request is sent by the user, cookie is added with the request by default. Thus, we recognize the user as the old user.
+
+Type of Cookie:
+1) Non-Persistent Cookie:
+It is valid for single session only. It is removed each time when user closes the browser.
+
+2)Persistent Cookie:
+It is valid for multiple session. It is not removed each time when the user closes the browser. It is removed only if user logout and signout.
+
+Advantages of Cookies:
+1) Simplest technique of maintaining the state.
+2) Cookies are maintained at client side.
+
+Disadvantages of Cookie:
+1) It will not work if cookies is disabled from the browser.
+2) Only textual information can be set in cookie object.
+
+How to create Cookie?
+Cookie()
+Cookie(String name,String value)
+
+Cookie ck = new Cookie("user","nelson jaiswal");
+response.addCookie(ck); //adding cookie in the response by the server
+
+How to delete Cookie?
+
+Cookie ck = new Cookie("user","");//deleting value of cookie
+ck.setMaxAge(0);//changing the maximum age to 0 seconds
+response.addCookie(ck);
+
+How to get Cookies;
+Cookie ck[] = reuest.getCookies();
+for(int i =0;i<ck.length;i++){
+	SOP("<br>"+ck[i].getName()+""+ck[i].getValue());
+}
+
+In this example, we are storing the name of the user in the cookie object and accessing it in another servlet. As we know well that session corresponds to the particular user. So if you access it from too many browsers with different values, you will get the different value.
+
+index.html
+
+<form action="servlet1" method="post">  
+Name:<input type="text" name="userName"/><br/>  
+<input type="submit" value="go"/>  
+</form> 
+
+FirstServlet.java
+import java.io.*;  
+import javax.servlet.*;  
+import javax.servlet.http.*;  
+  
+  
+public class FirstServlet extends HttpServlet {  
+  
+  public void doPost(HttpServletRequest request, HttpServletResponse response){  
+    try{  
+  
+    response.setContentType("text/html");  
+    PrintWriter out = response.getWriter();  
+          
+    String n=request.getParameter("userName");  
+    out.print("Welcome "+n);  
+  
+    Cookie ck=new Cookie("uname",n);//creating cookie object  
+    response.addCookie(ck);//adding cookie in the response  
+  
+    //creating submit button  
+    out.print("<form action='servlet2'>");  
+    out.print("<input type='submit' value='go'>");  
+    out.print("</form>");  
+          
+    out.close();  
+  
+        }catch(Exception e){System.out.println(e);}  
+  }  
+} 
+
+SecondServlet.java
+import java.io.*;  
+import javax.servlet.*;  
+import javax.servlet.http.*;  
+  
+public class SecondServlet extends HttpServlet {  
+  
+public void doPost(HttpServletRequest request, HttpServletResponse response){  
+    try{  
+  
+    response.setContentType("text/html");  
+    PrintWriter out = response.getWriter();  
+      
+    Cookie ck[]=request.getCookies();  
+    out.print("Hello "+ck[0].getValue());  
+  
+    out.close();  
+  
+         }catch(Exception e){System.out.println(e);}  
+    }  
+      
+  
+}
+
+web.xml
+<web-app>  
+  
+<servlet>  
+<servlet-name>s1</servlet-name>  
+<servlet-class>FirstServlet</servlet-class>  
+</servlet>  
+  
+<servlet-mapping>  
+<servlet-name>s1</servlet-name>  
+<url-pattern>/servlet1</url-pattern>  
+</servlet-mapping>  
+  
+<servlet>  
+<servlet-name>s2</servlet-name>  
+<servlet-class>SecondServlet</servlet-class>  
+</servlet>  
+  
+<servlet-mapping>  
+<servlet-name>s2</servlet-name>  
+<url-pattern>/servlet2</url-pattern>  
+</servlet-mapping>  
+  
+</web-app> 
+
+2) Hidden Form Field:
+In case of Hidden Form Field a hidden (invisible) textfield is used for maintaining the state of an user.
+In such case, we store the information in the hidden field and get it from another servlet. This approach is better if we have to submit form in all the pages and we don't want to depend on the browser.
+
+
+Let's see the code to store value in hidden field.
+
+<input type="hidden" name="uname" value="Vimal Jaiswal"
+
+Real application of hidden form field
+It is widely used in comment form of a website. In such case, we store page id or page name in the hidden field so that each page can be uniquely identified.
+
+Advantage of Hidden Form Field
+It will always work whether cookie is disabled or not.
+
+Disadvantage of Hidden Form Field:
+It is maintained at server side.
+Extra form submission is required on each pages.
+Only textual information can be used.
+
+In this example, we are maintaning the state of the user using link. For this purpose, we are appending the name of the user in the query string and getting the value from the query string in another page.
+
+index.html
+
+<form action="servlet1">  
+Name:<input type="text" name="userName"/><br/>  
+<input type="submit" value="go"/>  
+</form>  
+
+FirstServlet.java
+
+import java.io.*;  
+import javax.servlet.*;  
+import javax.servlet.http.*;  
+  
+public class FirstServlet extends HttpServlet {  
+public void doGet(HttpServletRequest request, HttpServletResponse response){  
+        try{  
+  
+        response.setContentType("text/html");  
+        PrintWriter out = response.getWriter();  
+          
+        String n=request.getParameter("userName");  
+        out.print("Welcome "+n);  
+          
+        //creating form that have invisible textfield  
+        out.print("<form action='servlet2'>");  
+        out.print("<input type='hidden' name='uname' value='"+n+"'>");  
+        out.print("<input type='submit' value='go'>");  
+        out.print("</form>");  
+        out.close();  
+  
+                }catch(Exception e){System.out.println(e);}  
+    }  
+  
+}  
+
+SecondServlet.java
+
+import java.io.*;  
+import javax.servlet.*;  
+import javax.servlet.http.*;  
+public class SecondServlet extends HttpServlet {  
+public void doGet(HttpServletRequest request, HttpServletResponse response)  
+        try{  
+        response.setContentType("text/html");  
+        PrintWriter out = response.getWriter();  
+          
+        //Getting the value from the hidden field  
+        String n=request.getParameter("uname");  
+        out.print("Hello "+n);  
+  
+        out.close();  
+                }catch(Exception e){System.out.println(e);}  
+    }  
+}  
+
+web.xml
+
+<web-app>  
+  
+<servlet>  
+<servlet-name>s1</servlet-name>  
+<servlet-class>FirstServlet</servlet-class>  
+</servlet>  
+  
+<servlet-mapping>  
+<servlet-name>s1</servlet-name>  
+<url-pattern>/servlet1</url-pattern>  
+</servlet-mapping>  
+  
+<servlet>  
+<servlet-name>s2</servlet-name>  
+<servlet-class>SecondServlet</servlet-class>  
+</servlet>
+
+<servlet-mapping>  
+<servlet-name>s2</servlet-name>  
+<url-pattern>/servlet2</url-pattern>  
+</servlet-mapping>  
+  
+</web-app> 
+
+3) URL rewriting:
+
+In URL rewriting, we append a token or identifier to the URL of the next Servlet or the next resource. We can send parameter name/value pairs using the following format:
+
+url?name1=value1&name2=value2&??
+
+A name and a value is separated using an equal = sign, a parameter name/value pair is separated from another parameter using the ampersand(&). When the user clicks the hyperlink, the parameter name/value pairs will be passed to the server. From a Servlet, we can use getParameter() method to obtain a parameter value.
+
+Advantage of URL Rewriting
+It will always work whether cookie is disabled or not (browser independent).
+Extra form submission is not required on each pages.
+
+Disadvantage of URL Rewriting
+It will work only with links.
+It can send Only textual information.
+
+In this example, we are maintaning the state of the user using link. For this purpose, we are appending the name of the user in the query string and getting the value from the query string in another page.
+
+index.html
+
+<form action="servlet1">  
+Name:<input type="text" name="userName"/><br/>  
+<input type="submit" value="go"/>  
+</form>  
+
+FirstServlet.java
+
+import java.io.*;  
+import javax.servlet.*;  
+import javax.servlet.http.*;  
+  
+  
+public class FirstServlet extends HttpServlet {  
+  
+public void doGet(HttpServletRequest request, HttpServletResponse response){  
+        try{  
+  
+        response.setContentType("text/html");  
+        PrintWriter out = response.getWriter();  
+          
+        String n=request.getParameter("userName");  
+        out.print("Welcome "+n);  
+  
+        //appending the username in the query string  
+        out.print("<a href='servlet2?uname="+n+"'>visit</a>");  
+                  
+        out.close();  
+  
+                }catch(Exception e){System.out.println(e);}  
+    }  
+  
+}  
+
+SecondServlet.java
+
+import java.io.*;  
+import javax.servlet.*;  
+import javax.servlet.http.*;  
+  
+public class SecondServlet extends HttpServlet {  
+  
+public void doGet(HttpServletRequest request, HttpServletResponse response)  
+        try{  
+  
+        response.setContentType("text/html");  
+        PrintWriter out = response.getWriter();  
+          
+        //getting value from the query string  
+        String n=request.getParameter("uname");  
+        out.print("Hello "+n);  
+  
+        out.close();  
+  
+                }catch(Exception e){System.out.println(e);}  
+    }  
+      
+  
+}  
+
+web.xml
+
+<web-app>  
+  
+<servlet>  
+<servlet-name>s1</servlet-name>  
+<servlet-class>FirstServlet</servlet-class>  
+</servlet>  
+  
+<servlet-mapping>  
+<servlet-name>s1</servlet-name>  
+<url-pattern>/servlet1</url-pattern>  
+</servlet-mapping>  
+  
+<servlet>  
+<servlet-name>s2</servlet-name>  
+<servlet-class>SecondServlet</servlet-class>  
+</servlet>  
+  
+<servlet-mapping>  
+<servlet-name>s2</servlet-name>  
+<url-pattern>/servlet2</url-pattern>  
+</servlet-mapping>  
+  
+</web-app>
+
+4) HttpSession Interface:
+Container creates a session id for user. The container uses this id to indentify the particular user. An object of HttpSession can be used to perform two tasks:
+
+1. Bind objects
+2. view and manipulate information about a session, such as session identifier, creation time and last accessed time.
+
+How to get HttpSession object?
+1. getSession() - Returns the current session associated with this request, or if the request does not have a session, creates one.
+
+2. getSession(boolean create) - Returns the current HttpSession associated with this request or, if there is no current session and create is true, returns a new session.
+
+Commonly used methods of HttpSession Interface;
+
+1. getId() - Returns a string containing the unique identifier value.
+
+2. getCreationTime() - Returns the time when this session was created, measured in milliseconds since midnight January 1, 1970 GMT.
+
+3. getLastAccessedTime() - Returns the last time the client sent a request associated with this session, as the number of milliseconds since midnight January 1, 1970 GMT.
+
+4. invalidate() - invalidates this session then unbinds any objects bound to it.
+
+In this example, we are setting the attribute in the session scope in one servlet and getting that value from the session scope in another servlet. To set the attribute in the session scope, we have used the setAttribute() method of HttpSession interface and to get the attribute, we have used the getAttribute method.
+
+index.html
+
+<form action="servlet1">  
+Name:<input type="text" name="userName"/><br/>  
+<input type="submit" value="go"/>  
+</form>  
+
+FirstServlet.java
+
+import java.io.*;  
+import javax.servlet.*;  
+import javax.servlet.http.*;  
+  
+  
+public class FirstServlet extends HttpServlet {  
+  
+public void doGet(HttpServletRequest request, HttpServletResponse response){  
+        try{  
+  
+        response.setContentType("text/html");  
+        PrintWriter out = response.getWriter();  
+          
+        String n=request.getParameter("userName");  
+        out.print("Welcome "+n);  
+          
+        HttpSession session=request.getSession();  
+        session.setAttribute("uname",n);  
+  
+        out.print("<a href='servlet2'>visit</a>");  
+                  
+        out.close();  
+  
+                }catch(Exception e){System.out.println(e);}  
+    }  
+  
+}  
+
+SecondServlet.java
+
+import java.io.*;  
+import javax.servlet.*;  
+import javax.servlet.http.*;  
+  
+public class SecondServlet extends HttpServlet {  
+  
+public void doGet(HttpServletRequest request, HttpServletResponse response)  
+        try{  
+  
+        response.setContentType("text/html");  
+        PrintWriter out = response.getWriter();  
+          
+        HttpSession session=request.getSession(false);  
+        String n=(String)session.getAttribute("uname");  
+        out.print("Hello "+n);  
+  
+        out.close();  
+  
+                }catch(Exception e){System.out.println(e);}  
+    }  
+      
+  
+}  
+
+web.xml
+
+<web-app>  
+  
+<servlet>  
+<servlet-name>s1</servlet-name>  
+<servlet-class>FirstServlet</servlet-class>  
+</servlet>  
+  
+<servlet-mapping>  
+<servlet-name>s1</servlet-name>  
+<url-pattern>/servlet1</url-pattern>  
+</servlet-mapping>  
+  
+<servlet>  
+<servlet-name>s2</servlet-name>  
+<servlet-class>SecondServlet</servlet-class>  
+</servlet>  
+  
+<servlet-mapping>  
+<servlet-name>s2</servlet-name>  
+<url-pattern>/servlet2</url-pattern>  
+</servlet-mapping>  
+  
+</web-app>

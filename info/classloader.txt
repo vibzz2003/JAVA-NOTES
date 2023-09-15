@@ -1,0 +1,62 @@
+Java ClassLoader is an abstract class. 
+t belongs to a java.lang package.
+It loads classes from different resources.
+Java ClassLoader is used to load the classes at run time
+JVM performs the linking process at runtime. 
+ If a loaded class depends on another class, that class is loaded as well.
+When we request to load a class, it delegates the class to its parent. 
+In this way, uniqueness is maintained in the runtime environment. 
+
+
+custom class -> system class loader -> extensions class loader -> bootstrap class loader
+
+It forwards the request for class loading to parent class loader. It only loads the class if the parent does not find or load the class.
+It allows child class loader to see all the classes loaded by parent ClassLoader. 
+It allows to load a class once. It is achieved by delegation principle.
+
+
+Types of ClassLoader :
+
+
+    Bootstrap Class Loader:
+        It loads standard JDK class files from rt.jar and other core classes.
+        It is a parent of all class loaders. 
+        String.class.getClassLoader() it returns null, and any code based on it throws NullPointerException.
+        also called Primordial ClassLoader.
+
+    
+    Extensions Class Loader:
+        It delegates class loading request to its parent.
+        If the loading of a class is unsuccessful, it loads classes from jre/lib/ext directory or any other directory as java.ext.dirs.
+
+    
+    System Class Loader:
+        It loads application specific classes from the CLASSPATH environment variable. 
+        It can be set while invoking program using -cp or classpath command line options.
+        It is a child of Extension ClassLoader
+        
+        
+        
+        
+        
+            request
+        jvm ------> classloader sub sysytem 
+                             |
+                             |
+                             |
+                    application classloader -> search in application classpath
+                             |
+                             |
+                             |
+                    extension class loader -> search in extension classpath
+                             |
+                             |
+                             |
+                    bootstrap classloader -> search in bootstrap classpath
+        
+
+
+it checks if the class is already loaded.
+If the class is not loaded, ask parent class loader to load the class.
+If parent class loader cannot load class, attempt to load it in this class loader.
+
